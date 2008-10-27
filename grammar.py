@@ -1,3 +1,5 @@
+# $Id$
+
 from pymeta.grammar import OMeta
 from constructs import *
 

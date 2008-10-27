@@ -1,3 +1,5 @@
+# $Id$
+
 class Enum(object):
 	"""
 	An Enum assigns integer values to string keys.  The values are constant;
