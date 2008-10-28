@@ -65,7 +65,11 @@ class New(Expression):
 		else:
 			self.arguments = []
 	def accept(self, visitor): visitor.visitNew(self)
-	def copy(self): return New(self.className.copy(), self.arguments[:])
+	def copy(self):
+		return New(
+			self.className.copy(),
+			[ a.copy() for a in self.arguments ]
+		)
 
 class Call(Expression):
 	def __init__(self, y, m, a):
@@ -80,7 +84,7 @@ class Call(Expression):
 		return Call(
 			self.target.copy(),
 			self.methodName.copy(),
-			self.arguments[:]
+			[ a.copy() for a in self.arguments ]
 		)
 
 
@@ -107,14 +111,18 @@ class Sequence(Construct):
 	def __init__(self, SS):
 		self.statements = SS
 	def accept(self, visitor): visitor.visitSequence(self)
-	def copy(self): return Sequence(self.statements[:])
+	def copy(self): return Sequence( [ s.copy() for s in self.statements ] )
 
 class Block(Statement):
 	def __init__(self, dv, Q):
 		self.declaredVars = dv
 		self.sequence = Q
 	def accept(self, visitor): visitor.visitBlock(self)
-	def copy(self): return Block(self.declaredVars[:], self.sequence.copy())
+	def copy(self):
+		return Block(
+			[ v.copy() for v in self.declaredVars ],
+			self.sequence.copy()
+		)
 
 class IfThenElse(Statement):
 	def __init__(self, b, S1, S2):
@@ -159,7 +167,7 @@ class MethodDeclaration(Declaration):
 	def copy(self):
 		return MethodDeclaration(
 			self.methodName.copy(),
-			self.parameters[:],
+			[ p.copy() for p in self.parameters ],
 			self.body.copy()
 		)
 
@@ -171,7 +179,7 @@ class ConstructorDeclaration(Declaration):
 	def accept(self, visitor): visitor.visitConstructorDeclaration(self)
 	def copy(self):
 		return ConstructorDeclaration(
-			self.parameters[:],
+			[ p.copy() for p in self.parameters ],
 			self.body.copy()
 		)
 
@@ -189,7 +197,7 @@ class ClassDeclaration(Declaration):
 			self.className.copy(),
 			self.memberVars.copy(),
 			self.constructor.copy(),
-			self.methods[:]
+			[ m.copy() for m in self.methods ]
 		)
 
 
@@ -200,7 +208,7 @@ class Program(Construct):
 	def accept(self, visitor): visitor.visitProgram(self)
 	def copy(self):
 		return Program(
-			self.classDeclarations[:],
+			[ c.copy for c in self.classDeclarations ],
 			self.initialStatement.copy()
 		)
 

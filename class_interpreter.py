@@ -279,19 +279,19 @@ class ClassInterpreterCmd(cmd.Cmd):
 		
 		except AttributeError, e:
 			self._printError(
-				"A runtime error occured in step number %i."
+				"A runtime error occured in step number %i."  % (i+1)
 			)
-			self._print(">>> %s" % ((i+1), e.message))
+			self._print(">>> %s" % e.message)
 		except LookupError, e:
 			self._printError(
-				"A runtime error occured in step number %i."
+				"A runtime error occured in step number %i."  % (i+1)
 			)
-			self._print(">>> %s" % ((i+1), e.message))
+			self._print(">>> %s" % e.message)
 		except NameError, e:
 			self._printError(
-				"A runtime error occured in step number %i."
+				"A runtime error occured in step number %i."  % (i+1)
 			)
-			self._print(">>> %s" % ((i+1), e.message))
+			self._print(">>> %s" % e.message)
 
 	
 	def _inspect(self, paths, depth=0):

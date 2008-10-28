@@ -308,7 +308,7 @@ class InterpreterVisitor(Visitor):
 				len(argumentMapping), len(call.arguments) )
 			)
 		binding = dict([
-				(argumentMapping[i], self._deref(call.arguments[i]))
+				(argumentMapping[i], self._deref(call.arguments[i].name))
 				for i in range(0, len(argumentMapping))
 			])
 		binding["self"] = targetReference
@@ -316,7 +316,7 @@ class InterpreterVisitor(Visitor):
 		self._declare(binding)
 		
 		self.__replaceConstructWith(
-			MethodScopedStatement(methodBody)
+			MethodScopedStatement(methodBody.copy())
 		)
 		
 
@@ -352,7 +352,7 @@ class InterpreterVisitor(Visitor):
 		
 		self.__replaceConstructWith(
 			MethodScopedStatement( Sequence(
-				[ constructorBody, Return( Variable("self") ) ]
+				[ constructorBody.copy(), Return( Variable("self") ) ]
 			))
 		)
 
@@ -445,13 +445,13 @@ class InterpreterVisitor(Visitor):
 		self.__replaceConstructWith(
 			IfThenElse(
 				whil.bool,
-				Block(
-					[],
-					Sequence([
-						whil.bodyStatement.copy(),
-						whil
-					])
-				),
+				# Omit the block statement so we don't increase
+				# the recursion depth. See visitSequence() for
+				# respective flattening.
+				Sequence([
+					whil.bodyStatement.copy(),
+					whil
+				]),
 				Skip()
 			)
 		)
@@ -469,6 +469,11 @@ class InterpreterVisitor(Visitor):
 		if not seq.statements:
 			self.__replaceConstructWith(None)
 		elif isinstance(seq.statements[0], ReturnValue):
+			self.__replaceConstructWith(seq.statements[0])
+		elif len(seq.statements) == 1:
+			# Replace sequences of one element with the element.
+			# This effectively flattens nested sequences resulting
+			# from while statements.
 			self.__replaceConstructWith(seq.statements[0])
 
 	
