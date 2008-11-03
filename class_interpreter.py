@@ -44,6 +44,12 @@ class ClassInterpreterCmd(cmd.Cmd):
 		""",
 		globals()
 	)
+	
+	intro =	"\n" \
+		"Welcome to the Class Interpreter\n" \
+		"================================\n" \
+		"\n" \
+		"Type 'help' to see a list of available commands.\n"
 
 	
 	def __init__(self):
@@ -334,7 +340,7 @@ class ClassInterpreterCmd(cmd.Cmd):
 			
 		self._print(
 			msg +
-			" Memory contents are available for inspection until "
+			" Memory contents remain available for inspection until "
 			"a new program is loaded."
 		)
 	
@@ -605,7 +611,7 @@ class ClassInterpreterCmd(cmd.Cmd):
 			"described by a (relative) object path <object path>. "
 			"The label can be used to later on refer to the object "
 			"even if its path changed by employing the object path "
-			"'label:<name>'. The label will also be used as the"
+			"'label:<name>'. The label will also be used as the "
 			"preferred name when inspecting the object using the "
 			"command 'inspect'."
 		)

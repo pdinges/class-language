@@ -2,6 +2,7 @@ class Symbol is begin
 	constructor() is skip;
 end;
 
+
 class Cell is begin
 	var left_neighbour;
 	var right_neighbour;
